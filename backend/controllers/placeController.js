@@ -1,7 +1,6 @@
 const Destination = require('../models/place');
 const ImageKit = require('imagekit');
-const { v4: uuidv4 } = require('uuid');
-
+const crypto = require('crypto');
 const imagekit = new ImageKit({
   publicKey: process.env.ImageKitPublicKey,
   privateKey: process.env.ImageKitPrivateKey,
@@ -48,7 +47,7 @@ exports.createPlace = async (req, res) => {
     }
 
     const newPlace = new Destination({
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       name,
       description,
       image: imageUrl,
