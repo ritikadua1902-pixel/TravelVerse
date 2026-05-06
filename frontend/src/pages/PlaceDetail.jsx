@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Shield, Leaf, CloudSun, AlertTriangle, Droplets, Mountain } from 'lucide-react';
 import DestinationMap from '../components/DestinationMap';
+import { API_BASE_URL } from '../config';
 const PlaceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const PlaceDetail = () => {
   useEffect(() => {
     const fetchPlace = async () => {
       try {
-        const response = await fetch('/api/places', { credentials: 'include' });
+        const response = await fetch(`${API_BASE_URL}/api/places`, { credentials: 'include' });
         if (!response.ok) {
           throw new Error('Failed to fetch places');
         }

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
-
+import { API_BASE_URL } from '../config';
 export const SafetyContext = createContext();
 
 export const SafetyProvider = ({ children }) => {
@@ -9,7 +9,7 @@ export const SafetyProvider = ({ children }) => {
   const [placesData, setPlacesData] = useState([]);
 
   useEffect(() => {
-    fetch('/api/places', { credentials: 'include' })
+    fetch(`${API_BASE_URL}/api/places`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => setPlacesData(data))
       .catch(err => console.error('Error fetching places:', err));
