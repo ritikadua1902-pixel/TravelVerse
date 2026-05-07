@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const ManageUsers = () => {
@@ -13,7 +13,7 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/admin/users`, { withCredentials: true });
+      const res = await axios.get(`${API_BASE_URL}/api/admin/users`, { withCredentials: true });
       setUsers(res.data);
     } catch (err) {
       console.error(err);
@@ -24,7 +24,7 @@ const ManageUsers = () => {
 
   const handleRoleChange = async (id, newRole) => {
     try {
-      await axios.patch(`${BASE_URL}/api/admin/user/${id}/role`, { role: newRole }, { withCredentials: true });
+      await axios.patch(`${API_BASE_URL}/api/admin/user/${id}/role`, { role: newRole }, { withCredentials: true });
       fetchUsers();
     } catch (err) {
       alert('Error updating role');
@@ -34,7 +34,7 @@ const ManageUsers = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
-      await axios.delete(`${BASE_URL}/api/admin/user/${id}`, { withCredentials: true });
+      await axios.delete(`${API_BASE_URL}/api/admin/user/${id}`, { withCredentials: true });
       fetchUsers();
     } catch (err) {
       alert('Error deleting user');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const ManagePlaces = () => {
@@ -25,7 +25,7 @@ const ManagePlaces = () => {
 
   const fetchPlaces = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/places`);
+      const res = await axios.get(`${API_BASE_URL}/api/places`);
       setPlaces(res.data);
     } catch (err) {
       console.error(err);
@@ -37,7 +37,7 @@ const ManagePlaces = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this place?')) return;
     try {
-      await axios.delete(`${BASE_URL}/api/admin/place/${id}`, { withCredentials: true });
+      await axios.delete(`${API_BASE_URL}/api/admin/place/${id}`, { withCredentials: true });
       fetchPlaces();
     } catch (err) {
       alert('Error deleting place');
@@ -80,7 +80,7 @@ const ManagePlaces = () => {
     if (image) formData.append('image', image);
 
     try {
-      await axios.post(`${BASE_URL}/api/admin/places`, formData, {
+      await axios.post(`${API_BASE_URL}/api/admin/places`, formData, {
         withCredentials: true,
         headers: { 'Content-Type': 'multipart/form-data' }
       });

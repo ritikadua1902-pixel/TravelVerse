@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../config';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const Dashboard = () => {
@@ -10,7 +10,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/admin/stats`, { withCredentials: true });
+        const res = await axios.get(`${API_BASE_URL}/api/admin/stats`, { withCredentials: true });
         setStats(res.data);
       } catch (err) {
         console.error("Failed to fetch stats", err);

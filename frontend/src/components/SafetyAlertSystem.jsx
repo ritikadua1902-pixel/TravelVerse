@@ -3,7 +3,7 @@ import emailjs from '@emailjs/browser';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { SafetyContext } from '../context/SafetyContext';
-import { BASE_URL } from '../config';
+import { API_BASE_URL } from '../config';
 
 // Define a threshold in degrees (approx 500 meters)
 const ALERT_RADIUS = 0.005;
@@ -15,7 +15,7 @@ const SafetyAlertSystem = () => {
 
   useEffect(() => {
     // Fetch all places to get red zones
-    axios.get(`${BASE_URL}/api/places`)
+    axios.get(`${API_BASE_URL}/api/places`)
       .then(res => setPlaces(res.data))
       .catch(err => console.error(err));
   }, []);
