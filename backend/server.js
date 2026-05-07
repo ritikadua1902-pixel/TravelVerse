@@ -16,10 +16,9 @@ const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: [
     'http://localhost:5173',
+    'http://localhost:5174',
     'http://127.0.0.1:5173',
-    'https://travel-verse-sable.vercel.app',
-    'https://travel-verse-plsy.vercel.app',
-    'https://travel-verse-pj1q.vercel.app'
+    'http://127.0.0.1:5174',
   ],
   credentials: true,
 };
@@ -36,16 +35,7 @@ app.use('/api/auth/', authRouter)
 app.use('/api/places', placeRouter);
 app.use('/api/admin', adminRouter);
 
-
-// Middleware to ensure DB is connected before processing requests
-app.use(async (req, res, next) => {
-  try {
-    await connectDb(process.env.MONGO_URI);
-    next();
-  } catch (err) {
-    res.status(500).json({ message: "Database connection failed", error: err.message });
-  }
-});
+connectDb(process.env.MONGO_URI)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
