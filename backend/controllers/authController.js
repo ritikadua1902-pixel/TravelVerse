@@ -25,7 +25,7 @@ exports.getRegister = async (req, res) => {
     });
 
     
-    const token = createToken({ id: user._id, email: user.email });
+    const token = createToken({ id: user._id, email: user.email, role: user.role });
 
    
     res.cookie("token", token, {
@@ -39,7 +39,8 @@ exports.getRegister = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
 
@@ -71,7 +72,7 @@ exports.getLogin = async (req, res) => {
     }
 
    
-    const token = createToken({ id: user._id, email: user.email });
+    const token = createToken({ id: user._id, email: user.email, role: user.role });
 
    
     res.cookie("token", token, {
@@ -86,7 +87,8 @@ exports.getLogin = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
       }
     });
 

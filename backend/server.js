@@ -8,6 +8,7 @@ const connectDb = require("./config/db.js")
 
 const authRouter = require('./router/authRouter');
 const placeRouter = require('./router/placeRouter');
+const adminRouter = require('./router/adminRouter');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -32,6 +33,7 @@ app.use('/api/auth/', authRouter)
 
 
 app.use('/api/places', placeRouter);
+app.use('/api/admin', adminRouter);
 
 
 app.listen(PORT, () => {

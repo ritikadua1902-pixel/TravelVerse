@@ -10,6 +10,12 @@ import './index.css';
 import { SafetyProvider } from './context/SafetyContext';
 import LocationPermissionModal from './components/LocationPermissionModal';
 import SOSWarningModal from './components/SOSWarningModal';
+import AdminRoute from './components/AdminRoute';
+import Dashboard from './pages/admin/Dashboard';
+import ManageUsers from './pages/admin/ManageUsers';
+import ManagePlaces from './pages/admin/ManagePlaces';
+import SafetyAlertSystem from './components/SafetyAlertSystem';
+import { Toaster } from 'react-hot-toast';
 
 // Simple auth check for protected routes
 const PrivateRoute = ({ children }) => {
@@ -27,6 +33,8 @@ function App() {
   return (
     <SafetyProvider>
       <Router>
+        <Toaster position="top-center" />
+        <SafetyAlertSystem />
         <Navbar />
         <LocationPermissionModal />
         <SOSWarningModal />
@@ -58,6 +66,19 @@ function App() {
                 <PlaceDetail />
               </PrivateRoute>
             } 
+          />
+          {/* Admin Routes */}
+          <Route 
+            path="/admin/dashboard" 
+            element={<AdminRoute><Dashboard /></AdminRoute>} 
+          />
+          <Route 
+            path="/admin/users" 
+            element={<AdminRoute><ManageUsers /></AdminRoute>} 
+          />
+          <Route 
+            path="/admin/places" 
+            element={<AdminRoute><ManagePlaces /></AdminRoute>} 
           />
         </Routes>
       </div>
