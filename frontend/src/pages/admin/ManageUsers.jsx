@@ -46,7 +46,7 @@ const ManageUsers = () => {
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <AdminSidebar />
-      <div className="flex-1 p-8 overflow-y-auto">
+      <div className="flex-1 p-4 pt-20 md:p-8 overflow-y-auto">
         <h1 className="text-3xl font-bold mb-8">Manage Users</h1>
         <div className="bg-gray-800 rounded-lg shadow border border-gray-700 overflow-x-auto">
           <table className="w-full text-left border-collapse">

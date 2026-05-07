@@ -174,6 +174,23 @@ const Navbar = () => {
                   <Phone size={16} /> Contacts
                 </button>
               )}
+              {user.role === 'admin' && (
+                <Link to="/admin/dashboard" style={{
+                  background: 'rgba(20, 184, 166, 0.1)',
+                  color: '#0d9488',
+                  border: '1px solid rgba(20, 184, 166, 0.2)',
+                  padding: '0.4rem 0.8rem',
+                  borderRadius: '2rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontWeight: '600',
+                  fontSize: '0.85rem',
+                  marginLeft: '0.5rem',
+                  textDecoration: 'none'
+                }}>
+                  Admin Panel
+                </Link>
+              )}
               <span style={{ color: 'var(--text-muted)', fontWeight: '500', marginLeft: '0.5rem' }}>Hi, {user.name}</span>
               <button onClick={handleLogout} style={{
                 background: 'transparent',

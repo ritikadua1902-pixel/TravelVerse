@@ -96,8 +96,8 @@ const ManagePlaces = () => {
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <AdminSidebar />
-      <div className="flex-1 p-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-8">
+      <div className="flex-1 p-4 pt-20 md:p-8 overflow-y-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <h1 className="text-3xl font-bold">Manage Places</h1>
           <button 
             onClick={() => setShowForm(!showForm)}
