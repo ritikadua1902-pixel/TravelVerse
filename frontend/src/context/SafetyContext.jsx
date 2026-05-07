@@ -152,6 +152,7 @@ Please help me immediately.`;
         for (const place of placesData) {
           if (place.redZones) {
              for (const zone of place.redZones) {
+                if (!zone.coordinates || !Array.isArray(zone.coordinates)) continue;
                 const dist = calculateDistance(newLocation.lat, newLocation.lng, zone.coordinates[0], zone.coordinates[1]);
                 if (dist <= 100) { // 100 meters threshold
                    inRedZone = true;

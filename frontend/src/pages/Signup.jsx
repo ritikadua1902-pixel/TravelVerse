@@ -8,6 +8,17 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const userStr = localStorage.getItem('user');
+    if (userStr && userStr !== 'undefined') {
+      try {
+        const user = JSON.parse(userStr);
+        if (user.role === 'admin') navigate('/admin/dashboard');
+        else navigate('/explore');
+      } catch (e) {}
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

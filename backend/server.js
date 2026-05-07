@@ -36,8 +36,15 @@ app.use('/api/places', placeRouter);
 app.use('/api/admin', adminRouter);
 
 
-// Connect to DB immediately for Vercel Serverless environment
-connectDb(process.env.MONGO_URI);
+// Middleware to ensure DB is connected before processing requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDb(process.env.MONGO_URI);
+    next();
+  } catch (err) {
+    res.status(500).json({ message: "Database connection failed", error: err.message });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

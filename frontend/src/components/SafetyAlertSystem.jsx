@@ -28,12 +28,14 @@ const SafetyAlertSystem = () => {
 
     places.forEach(place => {
       place.redZones?.forEach(zone => {
+        if (!zone.coordinates || !Array.isArray(zone.coordinates)) return;
+        
         const [zLat, zLng] = zone.coordinates;
         // Simple Euclidean distance for rough approximation
         const distance = Math.sqrt(Math.pow(userLat - zLat, 2) + Math.pow(userLng - zLng, 2));
 
         if (distance < ALERT_RADIUS) {
-          const alertKey = `${place.id}-${zone.id}`;
+          const alertKey = `${place._id || place.id}-${zone._id || zone.id}`;
           
           if (!alertHistory.has(alertKey)) {
             // User entered a new red zone
