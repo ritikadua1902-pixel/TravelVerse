@@ -36,8 +36,10 @@ app.use('/api/places', placeRouter);
 app.use('/api/admin', adminRouter);
 
 
+// Connect to DB immediately for Vercel Serverless environment
+connectDb(process.env.MONGO_URI);
+
 app.listen(PORT, () => {
-  connectDb(process.env.MONGO_URI)
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
