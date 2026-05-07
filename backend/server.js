@@ -15,11 +15,11 @@ const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
   origin: [
-    'http://localhost:5173', 
+    'http://localhost:5173',
     'http://127.0.0.1:5173',
-    'https://travel-verse-omega.vercel.app',
-    'https://travel-verse-pj1q.vercel.app',
-    'https://travel-verse-sable.vercel.app/'
+    'https://travel-verse-sable.vercel.app',
+    'https://travel-verse-plsy.vercel.app',
+    'https://travel-verse-pj1q.vercel.app'
   ],
   credentials: true,
 };
