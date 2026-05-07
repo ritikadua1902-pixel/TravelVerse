@@ -104,7 +104,6 @@ exports.createPlace = async (req, res) => {
     try { if (popularSpots) parsedPopularSpots = JSON.parse(popularSpots); } catch(e) {}
 
     const newPlace = new Destination({
-      id: crypto.randomUUID(),
       name,
       description,
       image: imageUrl,

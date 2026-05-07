@@ -47,7 +47,6 @@ exports.createPlace = async (req, res) => {
     }
 
     const newPlace = new Destination({
-      id: crypto.randomUUID(),
       name,
       description,
       image: imageUrl,

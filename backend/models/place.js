@@ -8,7 +8,6 @@ const coordinateSchema = {
 
 
 const redZoneSchema = new mongoose.Schema({
-  id: String,
   name: String,
   description: String,
   coordinates: coordinateSchema
@@ -16,7 +15,6 @@ const redZoneSchema = new mongoose.Schema({
 
 
 const hiddenGemSchema = new mongoose.Schema({
-  id: String,
   name: String,
   description: String,
   coordinates: coordinateSchema
@@ -24,7 +22,6 @@ const hiddenGemSchema = new mongoose.Schema({
 
 
 const popularSpotSchema = new mongoose.Schema({
-  id: String,
   name: String,
   description: String,
   coordinates: coordinateSchema
@@ -32,11 +29,6 @@ const popularSpotSchema = new mongoose.Schema({
 
 
 const destinationSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true
-  },
   name: {
     type: String,
     required: true

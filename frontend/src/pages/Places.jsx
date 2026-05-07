@@ -80,7 +80,7 @@ const Places = () => {
         gap: '2.5rem'
       }}>
         {places.map((place, idx) => (
-          <div key={place.id} className="glass-panel" style={{
+          <div key={place._id} className="glass-panel" style={{
             overflow: 'hidden',
             transition: 'all 0.3s ease',
             animationDelay: `${idx * 0.1}s`,
@@ -140,7 +140,7 @@ const Places = () => {
               
               <button 
                 className="btn" 
-                onClick={() => navigate(`/places/${place.id}`)}
+                onClick={() => navigate(`/places/${place._id}`)}
                 style={{
                   width: '100%',
                   background: 'rgba(21, 128, 61, 0.05)',

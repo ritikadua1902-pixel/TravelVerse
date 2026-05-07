@@ -19,7 +19,7 @@ const PlaceDetail = () => {
           throw new Error('Failed to fetch places');
         }
         const data = await response.json();
-        const foundPlace = data.find(p => p.id === id);
+        const foundPlace = data.find(p => p._id === id);
         if (foundPlace) {
           setPlace(foundPlace);
           console.log("Current Destination:", foundPlace);
@@ -227,7 +227,7 @@ const PlaceDetail = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {place.redZones?.map(spot => (
-              <li key={spot.id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+              <li key={spot._id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
                 <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.25rem', color: 'var(--text)' }}>{spot.name}</h4>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', margin: 0 }}>{spot.description}</p>
               </li>
@@ -241,7 +241,7 @@ const PlaceDetail = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {place.hiddenGems?.map(spot => (
-              <li key={spot.id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+              <li key={spot._id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
                 <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.25rem', color: 'var(--text)' }}>{spot.name}</h4>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', margin: 0 }}>{spot.description}</p>
               </li>
@@ -255,7 +255,7 @@ const PlaceDetail = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {place.popularSpots?.map(spot => (
-              <li key={spot.id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
+              <li key={spot._id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
                 <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.25rem', color: 'var(--text)' }}>{spot.name}</h4>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', margin: 0 }}>{spot.description}</p>
               </li>
