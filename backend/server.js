@@ -33,8 +33,9 @@ app.use('/api/auth/', authRouter)
 
 app.use('/api/places', placeRouter);
 
-connectDb(process.env.MONGO_URI)
+
 app.listen(PORT, () => {
+  connectDb(process.env.MONGO_URI)
   console.log(`Server running on http://localhost:${PORT}`);
 });
 
