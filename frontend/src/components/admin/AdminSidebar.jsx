@@ -52,7 +52,7 @@ const AdminSidebar = () => {
       gradient: 'from-emerald-500 to-teal-500',
       glow: 'shadow-emerald-500/25',
     },
-  ];
+  ]
 
   return (
     <>

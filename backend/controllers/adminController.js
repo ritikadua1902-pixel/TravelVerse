@@ -120,6 +120,48 @@ exports.createPlace = async (req, res) => {
   }
 };
 
+exports.updatePlace = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, baseCoordinates, redZones, hiddenGems } = req.body;
+
+    const existingPlace = await Destination.findById(id);
+    if (!existingPlace) {
+      return res.status(404).json({ message: 'Place not found' });
+    }
+
+    let imageUrl = existingPlace.image;
+    if (req.file) {
+      const response = await imagekit.upload({
+        file: req.file.buffer,
+        fileName: `place_${Date.now()}_${req.file.originalname}`,
+        folder: '/tour_himachal/places'
+      });
+      imageUrl = response.url;
+    }
+
+    let parsedCoordinates = existingPlace.baseCoordinates;
+    try { if (baseCoordinates) parsedCoordinates = JSON.parse(baseCoordinates); } catch(e) {}
+
+    let parsedRedZones = existingPlace.redZones;
+    let parsedHiddenGems = existingPlace.hiddenGems;
+    try { if (redZones) parsedRedZones = JSON.parse(redZones); } catch(e) {}
+    try { if (hiddenGems) parsedHiddenGems = JSON.parse(hiddenGems); } catch(e) {}
+
+    existingPlace.name = name || existingPlace.name;
+    existingPlace.description = description || existingPlace.description;
+    existingPlace.image = imageUrl;
+    existingPlace.baseCoordinates = parsedCoordinates;
+    existingPlace.redZones = parsedRedZones;
+    existingPlace.hiddenGems = parsedHiddenGems;
+
+    await existingPlace.save();
+    res.status(200).json(existingPlace);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating place', error: err.message });
+  }
+};
+
 exports.deletePlace = async (req, res) => {
   try {
     const { id } = req.params;

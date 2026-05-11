@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Shield, Leaf, CloudSun, AlertTriangle, Droplets, Mountain } from 'lucide-react';
 import DestinationMap from '../components/DestinationMap';
+import WeatherCard from '../components/WeatherCard';
 import { API_BASE_URL } from '../config';
 const PlaceDetail = () => {
   const { id } = useParams();
@@ -10,6 +11,8 @@ const PlaceDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showContacts, setShowContacts] = useState(false);
+  const [weather, setWeather] = useState(null);
+  const [weatherError, setWeatherError] = useState(false);
 
   useEffect(() => {
     const fetchPlace = async () => {
@@ -34,6 +37,27 @@ const PlaceDetail = () => {
     };
     fetchPlace();
   }, [id]);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      if (place && place.baseCoordinates && place.baseCoordinates.length >= 2) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/weather/${place.baseCoordinates[0]}/${place.baseCoordinates[1]}`);
+          if (response.ok) {
+            const data = await response.json();
+            setWeather(data);
+            setWeatherError(false);
+          } else {
+            setWeatherError(true);
+          }
+        } catch (err) {
+          console.error("Failed to fetch weather:", err);
+          setWeatherError(true);
+        }
+      }
+    };
+    fetchWeather();
+  }, [place]);
 
   if (loading) {
     return (
@@ -185,6 +209,10 @@ const PlaceDetail = () => {
               )}
             </div>
 
+            <div style={{ marginBottom: '2rem' }}>
+              <WeatherCard weather={weather} />
+            </div>
+
             <div style={{
               background: 'var(--background)',
               border: '1px solid var(--border)',
@@ -201,7 +229,13 @@ const PlaceDetail = () => {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '0.5rem' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Weather</span>
-                  <span style={{ fontWeight: '600' }}>15°C / Mostly Sunny</span>
+                  <span style={{ fontWeight: '600' }}>
+                    {weather 
+                      ? `${Math.round(weather.temp)}°C / ${weather.condition}` 
+                      : weatherError 
+                        ? 'Weather Unavailable' 
+                        : 'Loading...'}
+                  </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: 'var(--text-muted)' }}>Best Time</span>
@@ -241,20 +275,6 @@ const PlaceDetail = () => {
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {place.hiddenGems?.map(spot => (
-              <li key={spot._id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.25rem', color: 'var(--text)' }}>{spot.name}</h4>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', margin: 0 }}>{spot.description}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="glass-panel" style={{ background: '#ffffff', padding: '2rem' }}>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: '#2563eb' }}>
-            Popular Spots
-          </h3>
-          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {place.popularSpots?.map(spot => (
               <li key={spot._id} style={{ borderBottom: '1px solid var(--border)', paddingBottom: '1rem' }}>
                 <h4 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '0.25rem', color: 'var(--text)' }}>{spot.name}</h4>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', margin: 0 }}>{spot.description}</p>

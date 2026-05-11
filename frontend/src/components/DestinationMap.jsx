@@ -37,7 +37,6 @@ const createCustomIcon = (color) => {
 
 const redZoneIcon = createCustomIcon('#ef4444');
 const hiddenGemIcon = createCustomIcon('#f59e0b');
-const popularSpotIcon = createCustomIcon('#3b82f6');
 
 const userLocationIcon = createCustomIcon('#10b981'); // Emerald green for user
 const otherUserIcon = createCustomIcon('#8b5cf6'); // Purple for other users
@@ -60,7 +59,6 @@ function RecenterMap({ location }) {
 const DestinationMap = ({ place }) => {
   const [showRedZones, setShowRedZones] = useState(true);
   const [showHiddenGems, setShowHiddenGems] = useState(true);
-  const [showPopularSpots, setShowPopularSpots] = useState(true);
   
   const { currentLocation, locationPermissionStatus, requestLocationPermission, activeUsers } = useContext(SafetyContext);
 
@@ -115,18 +113,7 @@ const DestinationMap = ({ place }) => {
           </Marker>
         ))}
 
-        {showPopularSpots && place.popularSpots?.map(spot => (
-          <Marker key={spot.id} position={spot.coordinates} icon={popularSpotIcon}>
-            <Popup>
-              <div style={{ padding: '0.2rem' }}>
-                <h4 style={{ color: '#2563eb', margin: '0 0 0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '1rem' }}>
-                  <MapPin size={16} /> {spot.name}
-                </h4>
-                <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.4 }}>{spot.description}</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+
 
         {currentLocation && <RecenterMap location={currentLocation} />}
 
@@ -209,16 +196,7 @@ const DestinationMap = ({ place }) => {
           Hidden Gems
         </label>
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.95rem' }}>
-          <input 
-            type="checkbox" 
-            checked={showPopularSpots} 
-            onChange={(e) => setShowPopularSpots(e.target.checked)} 
-            style={{ accentColor: '#3b82f6', width: '16px', height: '16px' }} 
-          />
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#3b82f6', border: '1px solid white', boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }}></div>
-          Popular Spots
-        </label>
+
       </div>
 
       {/* Permission Fallback Message */}

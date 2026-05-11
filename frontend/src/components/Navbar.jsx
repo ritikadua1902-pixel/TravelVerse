@@ -54,10 +54,11 @@ const Navbar = () => {
           gap: '0.5rem',
           fontSize: '1.25rem',
           fontWeight: '700',
-          color: 'var(--text)'
+          color: 'var(--text)',
+          textDecoration: 'none'
         }}>
           <MapPin color="var(--primary)" size={28} />
-          Tour<span style={{color: 'var(--primary)'}}>Himachal</span>
+          Travel<span style={{color: 'var(--primary)'}}>Verse</span>
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>

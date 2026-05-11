@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { getStats, getAllUsers, updateUserRole, deleteUser, createPlace, deletePlace } = require('../controllers/adminController');
+const { getStats, getAllUsers, updateUserRole, deleteUser, createPlace, updatePlace, deletePlace } = require('../controllers/adminController');
 const { checkAuth } = require('../middlewares/checkLogin');
 const { isAdmin } = require('../middlewares/adminMiddleware');
 
@@ -20,6 +20,7 @@ router.delete('/user/:id', deleteUser);
 
 // Place Management
 router.post('/places', upload.single('image'), createPlace);
+router.put('/place/:id', upload.single('image'), updatePlace);
 router.delete('/place/:id', deletePlace);
 
 module.exports = router;
