@@ -45,6 +45,9 @@ app.use('/api/auth/', authRouter)
 app.use('/api/places', placeRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/weather', weatherRouter);
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 // Socket.io Logic
 let activeUsersCount = 0;
