@@ -16,6 +16,7 @@ const { Server } = require('socket.io');
 const Hazard = require('./models/hazard');
 
 const app = express();
+app.set('trust proxy', 1);
 const httpServer = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
