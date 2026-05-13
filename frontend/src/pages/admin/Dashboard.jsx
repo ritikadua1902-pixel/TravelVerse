@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { SafetyContext } from '../../context/SafetyContext';
 
 import {
   Users,
@@ -11,6 +12,7 @@ import {
   Clock,
   ArrowUpRight,
   Sparkles,
+  AlertTriangle,
 } from 'lucide-react';
 
 import { motion } from 'framer-motion';
@@ -18,6 +20,7 @@ import { API_BASE_URL } from '../../config';
 import AdminSidebar from '../../components/admin/AdminSidebar';
 
 const Dashboard = () => {
+  const { liveActiveUsersCount, reportedHazards } = useContext(SafetyContext);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -74,7 +77,7 @@ const Dashboard = () => {
     },
     {
       title: 'Active Now',
-      value: stats?.totalUsers ? Math.max(1, Math.floor(stats.totalUsers * 0.3)) : 0,
+      value: liveActiveUsersCount || 0,
       icon: <Activity size={22} />,
       gradient: 'from-amber-500 to-orange-600',
       bgGlow: 'bg-amber-500/10',
@@ -210,6 +213,81 @@ const Dashboard = () => {
               </motion.div>
             ))}
           </div>
+
+          {/* Stats Cards */}
+          {/* ... (existing stats cards code) ... */}
+
+          {/* Live Hazard Feed */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 bg-[#0f172a]/60 border border-red-500/20 rounded-2xl overflow-hidden shadow-xl shadow-red-500/5 backdrop-blur-sm"
+          >
+            <div className="px-6 py-4 border-b border-red-500/10 flex items-center justify-between bg-gradient-to-r from-red-500/10 to-transparent">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                  <AlertTriangle size={18} className="text-red-500" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-white uppercase tracking-tight">Live Hazard Feed</h2>
+                  <p className="text-xs text-gray-500">Real-time reports from travelers</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest">Live Updates</span>
+              </div>
+            </div>
+
+            <div className="p-2 max-h-[300px] overflow-y-auto custom-scrollbar">
+              {reportedHazards && reportedHazards.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
+                  {reportedHazards.map((hazard, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-white/[0.03] border border-white/5 rounded-xl p-4 relative group hover:border-red-500/30 transition-all"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          hazard.type === 'Landslide' ? 'bg-amber-500/20 text-amber-500' :
+                          hazard.type === 'Flood' ? 'bg-blue-500/20 text-blue-500' :
+                          'bg-red-500/20 text-red-500'
+                        }`}>
+                          {hazard.type}
+                        </span>
+                        <span className="text-[9px] text-gray-600 font-medium">
+                          {new Date(hazard.timestamp).toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-300 font-medium line-clamp-2 mb-3">
+                        {hazard.description}
+                      </p>
+                      <div className="flex items-center justify-between border-t border-white/5 pt-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[8px] text-white">
+                            {hazard.reportedByName?.charAt(0)}
+                          </div>
+                          <span className="text-[10px] text-gray-500 italic">by {hazard.reportedByName}</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-[10px] text-blue-400 font-medium">
+                          <MapPin size={10} />
+                          {hazard.location?.lat.toFixed(2)}, {hazard.location?.lng.toFixed(2)}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 flex flex-col items-center justify-center text-gray-600">
+                  <Activity size={32} className="opacity-20 mb-3" />
+                  <p className="text-sm font-medium">No active hazard reports</p>
+                  <p className="text-[10px] mt-1">System is monitoring for live updates...</p>
+                </div>
+              )}
+            </div>
+          </motion.section>
 
           {/* Bottom Sections */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

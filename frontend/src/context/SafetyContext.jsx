@@ -1,18 +1,56 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
+import toast from 'react-hot-toast';
+import { io } from 'socket.io-client';
 import { API_BASE_URL } from '../config';
 export const SafetyContext = createContext();
+
+const socket = io(API_BASE_URL, {
+  withCredentials: true
+});
 
 export const SafetyProvider = ({ children }) => {
   const [locationPermissionStatus, setLocationPermissionStatus] = useState(() => {
     return localStorage.getItem('locationPermissionStatus') || 'pending';
   });
   const [placesData, setPlacesData] = useState([]);
+  const [reportedHazards, setReportedHazards] = useState([]);
+  const [liveActiveUsersCount, setLiveActiveUsersCount] = useState(0);
+
+  useEffect(() => {
+    // Listen for real-time updates
+    socket.on('activeUsersUpdate', (count) => {
+      setLiveActiveUsersCount(count);
+    });
+
+    socket.on('hazardReported', (hazard) => {
+      setReportedHazards(prev => [hazard, ...prev]);
+      
+      // Notify the user in real-time
+      toast.error(
+        <div>
+          <strong className="text-red-500 font-bold">⚠️ REAL-TIME HAZARD ALERT</strong>
+          <p className="text-xs mt-1">
+            <strong>{hazard.type}</strong> reported by {hazard.reportedByName}.
+          </p>
+          <p className="text-[10px] text-gray-500 mt-0.5">{hazard.description}</p>
+        </div>,
+        { duration: 6000, position: 'top-right' }
+      );
+    });
+
+    return () => {
+      socket.off('activeUsersUpdate');
+      socket.off('hazardReported');
+    };
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/places`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => setPlacesData(data))
       .catch(err => console.error('Error fetching places:', err));
+    
+    // Fetch existing hazards (Optional: Implement endpoint if needed, for now we rely on real-time)
   }, []);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isTracking, setIsTracking] = useState(false);
@@ -205,14 +243,36 @@ Please help me immediately.`;
     
     const payload = {
       userId: user.id || 'anonymous',
+      userName: user.name || 'Anonymous',
       lat: location.lat,
       lng: location.lng,
       timestamp: new Date().toISOString()
     };
     
-    // Simulated API Call
-    console.log("📡 Synced location to server:", payload);
+    // Use Socket.io to sync location in real-time
+    socket.emit('updateLocation', payload);
+    console.log("📡 Synced location via socket:", payload);
   };
+
+  const reportHazard = useCallback((hazardData) => {
+    const userStr = localStorage.getItem('user');
+    let user = { id: null, name: 'Anonymous' };
+    try {
+      if (userStr && userStr !== 'undefined') {
+        user = JSON.parse(userStr);
+      }
+    } catch (e) {}
+
+    const fullHazardData = {
+      ...hazardData,
+      reportedBy: user.id,
+      reportedByName: user.name,
+      timestamp: new Date().toISOString()
+    };
+
+    socket.emit('reportHazard', fullHazardData);
+    console.log("⚠️ Emitted hazard report:", fullHazardData);
+  }, []);
 
   const toggleLocationSharing = useCallback(() => {
     setShareLocation(prev => {
@@ -323,7 +383,10 @@ Please help me immediately.`;
           triggerSOS,
           resetSOS,
           simulateRedZoneEntry,
-          emergencyContacts: getContacts()
+          emergencyContacts: getContacts(),
+          reportedHazards,
+          reportHazard,
+          liveActiveUsersCount
         }}
       >
       {children}

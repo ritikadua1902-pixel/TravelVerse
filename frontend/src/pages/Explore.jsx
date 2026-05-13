@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, ShieldCheck, Map, Leaf } from 'lucide-react';
+import { Compass, ShieldCheck, Map, Leaf, AlertTriangle } from 'lucide-react';
+import { SafetyContext } from '../context/SafetyContext';
+import HazardReportModal from '../components/HazardReportModal';
 
 const Explore = () => {
+  const { currentLocation, requestLocationPermission } = useContext(SafetyContext);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const userStr = localStorage.getItem('user');
   let user = null;
   try {
@@ -11,8 +15,19 @@ const Explore = () => {
     user = null;
   }
 
+  const handleReportClick = () => {
+    if (!currentLocation) {
+      requestLocationPermission();
+    }
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="container animate-fade-in" style={{ paddingBottom: '3rem' }}>
+      <HazardReportModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
       <div style={{
         marginTop: '3rem',
         padding: '5rem 3rem',
@@ -61,6 +76,19 @@ const Explore = () => {
             }}>
               <Compass size={20} style={{ marginRight: '0.5rem' }} /> Explore Places
             </Link>
+            <button 
+              onClick={handleReportClick}
+              className="btn btn-outline" 
+              style={{
+                padding: '1rem 2.5rem',
+                fontSize: '1.125rem',
+                background: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.5)',
+                color: '#fca5a5'
+              }}
+            >
+              <AlertTriangle size={20} style={{ marginRight: '0.5rem' }} /> Report Hazard
+            </button>
           </div>
         </div>
       </div>
