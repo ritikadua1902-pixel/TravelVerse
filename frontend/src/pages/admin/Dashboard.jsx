@@ -27,9 +27,13 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        const token = localStorage.getItem('token');
         const res = await axios.get(
           `${API_BASE_URL}/api/admin/stats`,
-          { withCredentials: true }
+          { 
+            withCredentials: true,
+            headers: { Authorization: `Bearer ${token}` }
+          }
         );
         setStats(res.data);
       } catch (err) {

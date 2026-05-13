@@ -53,6 +53,7 @@ const Signup = () => {
       }
 
       localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
       if (data.user.role === 'admin') {
         navigate('/admin/dashboard');
       } else {

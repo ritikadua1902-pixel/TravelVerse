@@ -43,7 +43,11 @@ const ManagePlaces = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this place?')) return;
     try {
-      await axios.delete(`${API_BASE_URL}/api/admin/place/${id}`, { withCredentials: true });
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_BASE_URL}/api/admin/place/${id}`, { 
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchPlaces();
     } catch (err) { alert('Error deleting place'); }
   };
@@ -113,8 +117,13 @@ const ManagePlaces = () => {
     formData.append('hiddenGems', JSON.stringify(hiddenGems));
     if (image) formData.append('image', image);
     try {
+      const token = localStorage.getItem('token');
       await axios.post(`${API_BASE_URL}/api/admin/places`, formData, {
-        withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true, 
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        },
       });
       setShowForm(false); fetchPlaces();
       setName(''); setDescription(''); setLat(''); setLng(''); setRedZones([]); setHiddenGems([]);
@@ -163,8 +172,13 @@ const ManagePlaces = () => {
     formData.append('hiddenGems', JSON.stringify(editHiddenGems));
     if (editImage) formData.append('image', editImage);
     try {
+      const token = localStorage.getItem('token');
       await axios.put(`${API_BASE_URL}/api/admin/place/${editingPlace._id}`, formData, {
-        withCredentials: true, headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true, 
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        },
       });
       setShowEditForm(false);
       setEditingPlace(null);

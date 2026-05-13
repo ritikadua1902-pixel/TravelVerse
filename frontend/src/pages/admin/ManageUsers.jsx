@@ -29,7 +29,11 @@ const ManageUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/admin/users`, { withCredentials: true });
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`${API_BASE_URL}/api/admin/users`, { 
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setUsers(res.data);
     } catch (err) {
       console.error(err);
@@ -40,10 +44,14 @@ const ManageUsers = () => {
 
   const handleRoleChange = async (id, newRole) => {
     try {
+      const token = localStorage.getItem('token');
       await axios.patch(
         `${API_BASE_URL}/api/admin/user/${id}/role`,
         { role: newRole },
-        { withCredentials: true }
+        { 
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` }
+        }
       );
       fetchUsers();
     } catch (err) {
@@ -53,7 +61,11 @@ const ManageUsers = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/api/admin/user/${id}`, { withCredentials: true });
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_BASE_URL}/api/admin/user/${id}`, { 
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setDeleteConfirm(null);
       fetchUsers();
     } catch (err) {
