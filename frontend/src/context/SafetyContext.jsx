@@ -1,12 +1,11 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { io } from 'socket.io-client';
+import axios from 'axios';
 import { API_BASE_URL } from '../config';
 export const SafetyContext = createContext();
 
-const socket = io(API_BASE_URL, {
-  withCredentials: true
-});
+const socket = io(API_BASE_URL);
 
 export const SafetyProvider = ({ children }) => {
   const [locationPermissionStatus, setLocationPermissionStatus] = useState(() => {
@@ -45,12 +44,9 @@ export const SafetyProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/places`, { credentials: 'include' })
-      .then(res => res.json())
-      .then(data => setPlacesData(data))
+    axios.get(`${API_BASE_URL}/api/places`)
+      .then(res => setPlacesData(res.data))
       .catch(err => console.error('Error fetching places:', err));
-    
-    // Fetch existing hazards (Optional: Implement endpoint if needed, for now we rely on real-time)
   }, []);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [isTracking, setIsTracking] = useState(false);

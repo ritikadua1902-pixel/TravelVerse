@@ -1,5 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios';
+
+// Global axios configuration
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';

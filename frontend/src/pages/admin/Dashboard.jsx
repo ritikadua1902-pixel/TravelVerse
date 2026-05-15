@@ -31,7 +31,6 @@ const Dashboard = () => {
         const res = await axios.get(
           `${API_BASE_URL}/api/admin/stats`,
           { 
-            withCredentials: true,
             headers: { Authorization: `Bearer ${token}` }
           }
         );

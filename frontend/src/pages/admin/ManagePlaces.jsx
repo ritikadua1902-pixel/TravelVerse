@@ -45,7 +45,6 @@ const ManagePlaces = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`${API_BASE_URL}/api/admin/place/${id}`, { 
-        withCredentials: true,
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchPlaces();
@@ -119,7 +118,6 @@ const ManagePlaces = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(`${API_BASE_URL}/api/admin/places`, formData, {
-        withCredentials: true, 
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -174,7 +172,6 @@ const ManagePlaces = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(`${API_BASE_URL}/api/admin/place/${editingPlace._id}`, formData, {
-        withCredentials: true, 
         headers: { 
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`

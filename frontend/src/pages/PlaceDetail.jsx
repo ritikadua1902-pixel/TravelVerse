@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Shield, Leaf, CloudSun, AlertTriangle, Droplets, Mountain } from 'lucide-react';
 import DestinationMap from '../components/DestinationMap';
 import WeatherCard from '../components/WeatherCard';
+import axios from 'axios';
 import { API_BASE_URL } from '../config';
 const PlaceDetail = () => {
   const { id } = useParams();
@@ -17,12 +18,9 @@ const PlaceDetail = () => {
   useEffect(() => {
     const fetchPlace = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/places`, { credentials: 'include' });
-        if (!response.ok) {
-          throw new Error('Failed to fetch places');
-        }
-        const data = await response.json();
-        const foundPlace = data.find(p => p._id === id);
+      const response = await axios.get(`${API_BASE_URL}/api/places`);
+      const data = response.data;
+      const foundPlace = data.find(p => p._id === id);
         if (foundPlace) {
           setPlace(foundPlace);
           console.log("Current Destination:", foundPlace);
@@ -42,11 +40,9 @@ const PlaceDetail = () => {
     const fetchWeather = async () => {
       if (place && place.baseCoordinates && place.baseCoordinates.length >= 2) {
         try {
-          const response = await fetch(`${API_BASE_URL}/api/weather/${place.baseCoordinates[0]}/${place.baseCoordinates[1]}`);
-          if (response.ok) {
-            const data = await response.json();
-            setWeather(data);
-            setWeatherError(false);
+          const response = await axios.get(`${API_BASE_URL}/api/weather/${place.baseCoordinates[0]}/${place.baseCoordinates[1]}`);
+          setWeather(response.data);
+          setWeatherError(false);
           } else {
             setWeatherError(true);
           }

@@ -21,13 +21,27 @@ const httpServer = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174',
-    process.env.FRONTEND_URL,
-  ],
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:5174',
+      'https://travel-verse-sable.vercel.app',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean);
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 

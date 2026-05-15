@@ -6,9 +6,20 @@ exports.createToken = (data) => {
 
 exports.checkAuth = (req, res, next) => {
   try {
-    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+    const cookieToken = req.cookies.token;
+    const headerToken = req.headers.authorization?.split(' ')[1];
+    const token = cookieToken || headerToken;
+
+    console.log('--- Auth Debug ---');
+    console.log('Origin:', req.headers.origin);
+    console.log('Cookie Token:', cookieToken ? 'Present' : 'Missing');
+    console.log('Header Token:', headerToken ? 'Present' : 'Missing');
+    console.log('Auth Header:', req.headers.authorization ? 'Present' : 'Missing');
+    console.log('Method:', req.method);
+    console.log('URL:', req.url);
 
     if (!token) {
+      console.log('Result: 401 - No token provided');
       return res.status(401).json({ message: "Unauthorized: No token provided" });
     }
 

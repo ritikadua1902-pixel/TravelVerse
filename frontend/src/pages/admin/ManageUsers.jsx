@@ -31,7 +31,6 @@ const ManageUsers = () => {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.get(`${API_BASE_URL}/api/admin/users`, { 
-        withCredentials: true,
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(res.data);
@@ -49,7 +48,6 @@ const ManageUsers = () => {
         `${API_BASE_URL}/api/admin/user/${id}/role`,
         { role: newRole },
         { 
-          withCredentials: true,
           headers: { Authorization: `Bearer ${token}` }
         }
       );
@@ -63,7 +61,6 @@ const ManageUsers = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`${API_BASE_URL}/api/admin/user/${id}`, { 
-        withCredentials: true,
         headers: { Authorization: `Bearer ${token}` }
       });
       setDeleteConfirm(null);

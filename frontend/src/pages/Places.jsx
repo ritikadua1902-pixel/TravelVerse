@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Info, Leaf } from 'lucide-react';
+import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
 const Places = () => {
@@ -12,12 +13,8 @@ const Places = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/places`, { credentials: 'include' });
-        if (!response.ok) {
-          throw new Error('Failed to fetch places');
-        }
-        const data = await response.json();
-        setPlaces(data);
+        const response = await axios.get(`${API_BASE_URL}/api/places`);
+        setPlaces(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
