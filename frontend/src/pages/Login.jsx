@@ -125,6 +125,9 @@ const Login = () => {
               fontSize: '0.875rem'
             }}>
               {error}
+              <div style={{ marginTop: '0.5rem', fontSize: '0.7rem', opacity: 0.7 }}>
+                Target: {API_BASE_URL}/api/auth/login
+              </div>
             </div>
           )}
 

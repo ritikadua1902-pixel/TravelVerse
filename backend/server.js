@@ -21,41 +21,27 @@ const httpServer = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:5174',
-      'https://travel-verse-sable.vercel.app',
-      process.env.FRONTEND_URL,
-    ].filter(Boolean);
-    
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: '*', 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+  credentials: false,
 };
 
 const io = new Server(httpServer, {
   cors: corsOptions
 });
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - Origin: ${req.headers.origin}`);
+  next();
+});
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser());
 
 
-app.use('/api/auth/', authRouter)
+app.use('/api/auth', authRouter)
 
 
 app.use('/api/places', placeRouter);
@@ -105,8 +91,8 @@ io.on('connection', (socket) => {
 
 connectDb(process.env.MONGO_URI)
 
-httpServer.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+httpServer.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;

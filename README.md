@@ -4,7 +4,7 @@ A full-stack travel application for exploring Himachal Pradesh, featuring real-t
 
 ## Deployment Links
 
-- **Frontend**: [https://travel-verse-sable.vercel.app/](https://travel-verse-sable.vercel.app/)
+- **Frontend**: [https://travel-verse-plsy.vercel.app/](https://travel-verse-plsy.vercel.app/)
 - **Backend**: [https://travelverse-production.up.railway.app/](https://travelverse-production.up.railway.app/)
 
 ## Key Features

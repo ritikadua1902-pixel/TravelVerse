@@ -43,13 +43,12 @@ const PlaceDetail = () => {
           const response = await axios.get(`${API_BASE_URL}/api/weather/${place.baseCoordinates[0]}/${place.baseCoordinates[1]}`);
           setWeather(response.data);
           setWeatherError(false);
-          } else {
-            setWeatherError(true);
-          }
         } catch (err) {
           console.error("Failed to fetch weather:", err);
           setWeatherError(true);
         }
+      } else if (place) {
+        setWeatherError(true);
       }
     };
     fetchWeather();
